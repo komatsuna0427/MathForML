@@ -1,0 +1,17 @@
+---
+title: "Answer for 100 Math Questions for Machine Learning"
+author: "Shota Komatsu"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+library(magrittr)
+library(ggplot2)
+library(foreach)
+```
+
+
+# Linear Regression
+
