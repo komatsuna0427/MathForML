@@ -1,0 +1,97 @@
+# 2. Classification
+
+## 20
+
+Take any $x \in \mathbb{R}^{p}$. What we need to show is that for each $y \in \{1, -1\}$,
+$$
+P(Y = y) = \frac{1}{1 + \exp(-y(\beta_{0} + \beta^{T}x))}
+$$
+holds.
+
+When $y=1$,
+$$
+\begin{align}
+\frac{1}{1 + \exp(-y(\beta_{0} + \beta^{T}x))} 
+&= \frac{1}{1 + \exp(-(\beta_{0} + \beta^{T}x))} \\
+&= \frac{\exp(\beta_{0} + \beta^{T}x)}{[1 + \exp(-(\beta_{0} + \beta^{T}x))]\exp(\beta_{0} + \beta^{T}x)} \\
+&= \frac{\exp(\beta_{0} + \beta^{T}x)}{\exp(\beta_{0} + \beta^{T}x) + 1} \\
+&= P(Y = 1).
+\end{align}
+$$
+
+When $y=-1$,
+$$
+\begin{align}
+\frac{1}{1 + \exp(-y(\beta_{0} + \beta^{T}x))} 
+&= \frac{1}{1 + \exp(\beta_{0} + \beta^{T}x)} \\
+&= P(Y = -1),
+\end{align}
+$$
+which completes the proof.
+
+## 21
+
+Taking the derivative of $f$,
+$$
+\begin{aligned}
+f^{\prime}(x) &= \frac{\beta \exp(- \beta_{0} - \beta x)}{[1 + \exp(- \beta_{0} - \beta x)]^{2}} \\
+&= \beta \frac{\exp(- \beta_{0} - \beta x)}{1 + \exp(- \beta_{0} - \beta x)}  \cdot \frac{1}{1 + \exp(- \beta_{0} - \beta x)} \\
+&= \beta \frac{\exp(- \beta_{0} - \beta x)}{1 + \exp(- \beta_{0} - \beta x)}  \cdot f(x) \\
+&= \beta \frac{1 + \exp(- \beta_{0} - \beta x) - 1}{1 + \exp(- \beta_{0} - \beta x)}  \cdot f(x) \\
+&= \beta \left(1 - \frac{1}{1 + \exp(- \beta_{0} - \beta x)} \right) f(x) \\
+&= \beta \left(1 - f(x) \right)  f(x) \\
+&= \beta f(x) \left(1 - f(x) \right) \\
+\end{aligned}
+$$
+Since $f(x) > 0$ for all $x \in \mathbb{R}$, $f^{\prime}(x) > 0$ for all $x \in \mathbb{R}$. Thus $f$ is monotonically increasing.
+
+Let $A := 1 + \exp(- \beta_{0} - \beta x)$. Using the result above,
+$$
+\begin{aligned}
+\frac{f^{\prime\prime}(x)}{\beta} &= f^{\prime}(x) \left(1 - f(x) \right) + f(x) (-f^{\prime}(x)) \\
+&= \beta f(x) \left(1 - f(x) \right)^{2} - \beta [f(x)]^{2} \left(1 - f(x) \right) \\
+&= \beta f(x) \left(1 - f(x) \right)(1 - f(x) - f(x)) \\
+&= \beta f(x) \left(1 - f(x) \right)(1 - 2f(x)) \\
+&= \beta f(x) \left(1 - f(x) \right) \left[1 - \frac{2}{1 + \exp(- \beta_{0} - \beta x)} \right] \\
+&= \beta f(x) \left(1 - f(x) \right) \left[\frac{\exp(- \beta_{0} - \beta x) - 1}{1 + \exp(- \beta_{0} - \beta x)} \right] \\
+&= \beta \frac{f(x) \left(1 - f(x) \right)}{1 + \exp(- \beta_{0} - \beta x)}[\exp(- \beta_{0} - \beta x) - 1] \\
+\therefore f^{\prime\prime}(x) &= \beta^{2} \frac{f(x) \left(1 - f(x) \right)}{1 + \exp(- \beta_{0} - \beta x)}[\exp(- \beta_{0} - \beta x) - 1] 
+\end{aligned}
+$$
+
+Note that $\beta^{2} \frac{f(x) \left(1 - f(x) \right)}{1 + \exp(- \beta_{0} - \beta x)} > 0$. Thus $f(x)$ is convex if and only if:
+$$
+\begin{aligned}
+f^{\prime\prime}(x) > 0 &\Leftrightarrow \exp(-\beta_{0} - \beta x) - 1 > 0 \\
+&\Leftrightarrow \exp(-\beta_{0} - \beta x) > 1 \\
+&\Leftrightarrow -\beta_{0} - \beta x > 0 \\
+&\Leftrightarrow x < - \frac{\beta_{0}}{\beta}.
+\end{aligned}
+$$
+
+Analogously, we can show that $f(x)$ is concave if and only if:
+$$
+\begin{aligned}
+f^{\prime\prime}(x) < 0 &\Leftrightarrow x >- \frac{\beta_{0}}{\beta}.
+\end{aligned}
+$$
+
+```{r}
+# Define a function
+logit <- function(x, beta = 1, beta_0 = 0){
+  output <- exp(beta_0 + beta * x) / (1 + exp(beta_0 +beta * x))
+  return(output)
+}
+# Plot the function for each beta
+beta_seq_expand <- expand.grid(b = seq(0, 10, by = .5))
+g_21 <- ggplot(data.frame(X = c(-10, 10)), aes(x = X)) +
+  mapply(
+    function(b, co) stat_function(fun = logit, args = list(beta = b), aes_q(color = co)),
+    beta_seq_expand$b, beta_seq_expand$b
+  ) +
+  ggtitle("Logistics curve") +
+  labs(color = latex2exp::TeX("$\\beta$"))
+plot(g_21)
+```
+
+

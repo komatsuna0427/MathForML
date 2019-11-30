@@ -13,5 +13,10 @@ library(foreach)
 ```
 
 
-# Linear Regression
+<!-- 1. Linear Regression -->
+```{r child="1_LinearRegression.Rmd"}
+```
 
+<!-- 2. Classification -->
+```{r child="2_Classification.Rmd"}
+```
