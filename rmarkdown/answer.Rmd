@@ -2,11 +2,17 @@
 title: "Answer for 100 Math Questions for Machine Learning"
 author: "Shota Komatsu"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-output: html_document
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 1
+  html_document:
+    toc: true
+    toc_depth: 1
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(magrittr)
 library(ggplot2)
 library(foreach)

@@ -1,0 +1,156 @@
+# 1. Linear Regression
+
+## Q 1
+Let:
+$$
+Q(\beta_{0}, \beta_{1}) := \sum_{i=1}^{N} (y_{i} - \beta_{0} - \beta_{1}x_{i})^{2}.
+$$
+
+Taking the first order conditions, we obtain:
+$$
+\begin{aligned}
+\begin{cases}
+0 = \frac{\partial Q}{\partial \beta_{0}} = -2 \sum_{i=1}^{N} (y_{i} - \beta_{0} - \beta_{1}x_{i}) \\
+0 = \frac{\partial Q}{\partial \beta_{1}} = -2 \sum_{i=1}^{N} x_{i}(y_{i} - \beta_{0} - \beta_{1}x_{i})
+\end{cases} \\
+\therefore
+\begin{cases}
+\sum_{i=1}^{N} (y_{i} - \beta_{0} - \beta_{1}x_{i}) = 0 \\
+\sum_{i=1}^{N} x_{i}(y_{i} - \beta_{0} - \beta_{1}x_{i}) = 0
+\end{cases}.
+\end{aligned}
+$$
+
+From the first equation,
+$$
+\begin{aligned}
+\sum_{i=1}^{N} y_{i} - N \beta_{0} - \beta_{1}\sum_{i=1}^{N} x_{i} &= 0 \\
+\frac{1}{N}\sum_{i=1}^{N} y_{i} - \beta_{0} - \beta_{1}\frac{1}{N}\sum_{i=1}^{N} x_{i} &= 0 \\
+\therefore \beta_{0} = \bar{y} - \beta_{1}\bar{x}.
+\end{aligned}
+$$
+
+Insert this into the second equation in the first conditions,
+$$
+\begin{aligned}
+&\sum_{i=1}^{N} x_{i}(y_{i} - \bar{y} + \beta_{1}\bar{x} - \beta_{1}x_{i}) = 0 \\
+&\sum_{i=1}^{N} x_{i}y_{i}  - \bar{y}\sum_{i=1}^{N}x_{i} + \beta_{1}\bar{x}\sum_{i=1}^{N}x_{i} - \beta_{1}\sum_{i=1}^{N}x_{i}^{2} = 0 \\
+&\left( \sum_{i=1}^{N}x_{i}^{2} - \bar{x}\sum_{i=1}^{N}x_{i} \right)\beta_{1} = \sum_{i=1}^{N} x_{i}y_{i} - \bar{y}\sum_{i=1}^{N}x_{i}.
+\end{aligned}
+$$
+
+Here,
+$$
+\begin{aligned}
+\sum_{i=1}^{N}x_{i}^{2} - \bar{x}\sum_{i=1}^{N}x_{i} &= \sum_{i=1}^{N}x_{i}^{2} - 2\bar{x}\sum_{i=1}^{N}x_{i} + \bar{x}\sum_{i=1}^{N}x_{i} \\
+&= \sum_{i=1}^{N}x_{i}^{2} - 2\bar{x}\sum_{i=1}^{N}x_{i} + N \bar{x} \frac{1}{N} \sum_{i=1}^{N}x_{i} \\
+&= \sum_{i=1}^{N}x_{i}^{2} - 2\bar{x}\sum_{i=1}^{N}x_{i} + N \bar{x}^{2} \\
+&=  \sum_{i=1}^{N} (x_{i}^{2} - 2\bar{x}x_{i} + \bar{x}^{2}) \\
+&=  \sum_{i=1}^{N} (x_{i} - \bar{x})^{2}. \\
+\therefore \sum_{i=1}^{N}x_{i}^{2} - \bar{x}\sum_{i=1}^{N}x_{i} &=  \sum_{i=1}^{N} (x_{i} - \bar{x})^{2}.
+\end{aligned}
+$$
+
+Analogously, we can show that
+$$
+ \sum_{i=1}^{N} x_{i}y_{i} - \bar{y}\sum_{i=1}^{N}x_{i} = \sum_{i=1}^{N} (x_{i} - \bar{x})(y_{i} - \bar{y}).
+$$
+
+Therefore it follows that
+$$
+\begin{aligned}
+\left(\sum_{i=1}^{N} (x_{i} - \bar{x})^{2} \right) \beta_{1} &= \sum_{i=1}^{N} (x_{i} - \bar{x})(y_{i} - \bar{y}) \\
+\therefore \beta_{1} &= \frac{\sum_{i=1}^{N} (x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{N} (x_{i} - \bar{x})^{2}}
+\end{aligned}
+$$
+
+Thus
+$$
+\hat{\beta_{0}} = \bar{y} - \beta_{1}\bar{x}, \quad \hat{\beta_{1}} = \frac{\sum_{i=1}^{N} (x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{N} (x_{i} - \bar{x})^{2}}.
+$$
+
+Since the function $Q$ is convex, $\left(\hat{\beta_{0}}, \hat{\beta_{1}} \right)$ is the minimizer of $Q$.
+
+
+## Q 2
+Let the intercept and the slope of $l^{\prime}$ be $\tilde{\beta_{0}}$ and $\tilde{\beta_{1}}$ respectively. The equation of $l^{\prime}$ is
+$$
+y = \tilde{\beta_{0}} + \tilde{\beta_{1}}x.
+$$
+
+Since $l$ passes through $(x_{i} - \bar{x}, y_{i} - \bar{y}) \quad (i = 1, \cdots, N)$,
+
+$$
+y_{i} - \bar{y} = \tilde{\beta_{0}} + \tilde{\beta_{1}}(x_{i} - \bar{x}) \quad (i = 1, \cdots, N).
+$$
+
+By summing up for $i = 1, \cdots, N$,
+$$
+\begin{aligned}
+\sum_{i=1}^{N}y_{i} - N \bar{y} &= N \tilde{\beta_{0}} + \tilde{\beta_{1}} \left( \sum_{i=1}^{N}x_{i} -N \bar{x}\right) \\
+\sum_{i=1}^{N}y_{i} - \sum_{i=1}^{N}y_{i} &= N \tilde{\beta_{0}} + \tilde{\beta_{1}} \left( \sum_{i=1}^{N}x_{i} -\sum_{i=1}^{N}x_{i}\right) \\
+\therefore \tilde{\beta_{0}} = 0.
+\end{aligned}
+$$
+
+Then we get
+$$
+y_{i} - \bar{y} = \tilde{\beta_{1}}(x_{i} - \bar{x}) \quad (i = 1, \cdots, N).
+$$
+By multiplying $(x_{i} - \bar{x})$ on both sides,
+$$
+(y_{i} - \bar{y})(x_{i} - \bar{x}) = \tilde{\beta_{1}}(x_{i} - \bar{x})^{2} \quad (i = 1, \cdots, N).
+$$
+Summing up for $i = 1, \cdots, N$,
+$$
+\begin{aligned}
+\sum_{i=1}^{N}(y_{i} - \bar{y})(x_{i} - \bar{x}) &= \tilde{\beta_{1}} \left( \sum_{i=1}^{N}(x_{i} -\bar{x})^{2}\right) \\
+\therefore \tilde{\beta_{1}} &= \frac{\sum_{i=1}^{N} (x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{N} (x_{i} - \bar{x})^{2}}.
+\end{aligned}
+$$
+
+Thus
+
+$$
+\tilde{\beta_{0}} = 0, \quad \tilde{\beta_{1}} = \frac{\sum_{i=1}^{N} (x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{N} (x_{i} - \bar{x})^{2}}.
+$$
+
+After obtaining $\hat{\beta_{1}}$, we can get $\hat{\beta_{0}}$ from
+$$
+\hat{\beta_{0}} = \bar{y} - \beta_{1}\bar{x}.
+$$
+
+# Q 3
+
+```{r}
+# Set seed
+set.seed(1)
+# Number of observations
+N <- 100
+# Intercept and slope
+a <- rnorm(1)
+b <- rnorm(1)
+# Data points
+x <- rnorm(N)
+y <- a * x + b + rnorm(N)
+# Mean centering
+x_center <- x - mean(x)
+y_center <- y - mean(y)
+# Dataframe
+data_3 <- data.frame(group = "Original (l)", x, y) %>%
+  dplyr::bind_rows(
+    data.frame(group = "Centered (l')", x = x_center, y = y_center)
+  ) %>%
+  dplyr::mutate(
+    group = forcats::fct_relevel(group, "Original (l)", "Centered (l')")
+  )
+# Graph
+g_3 <- ggplot(data = data_3, aes(x = x, y = y, color = group)) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE, fullrange = TRUE) +
+  geom_vline(xintercept = 0, linetype = "solid") +
+  geom_hline(yintercept = 0, linetype = "solid")
+# Plot the graph
+plot(g_3)
+```
+

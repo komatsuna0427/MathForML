@@ -1,6 +1,6 @@
 # 2. Classification
 
-## 20
+## Q 20
 
 Take any $x \in \mathbb{R}^{p}$. What we need to show is that for each $y \in \{1, -1\}$,
 $$
@@ -10,26 +10,26 @@ holds.
 
 When $y=1$,
 $$
-\begin{align}
+\begin{aligned}
 \frac{1}{1 + \exp(-y(\beta_{0} + \beta^{T}x))} 
 &= \frac{1}{1 + \exp(-(\beta_{0} + \beta^{T}x))} \\
 &= \frac{\exp(\beta_{0} + \beta^{T}x)}{[1 + \exp(-(\beta_{0} + \beta^{T}x))]\exp(\beta_{0} + \beta^{T}x)} \\
 &= \frac{\exp(\beta_{0} + \beta^{T}x)}{\exp(\beta_{0} + \beta^{T}x) + 1} \\
 &= P(Y = 1).
-\end{align}
+\end{aligned}
 $$
 
 When $y=-1$,
 $$
-\begin{align}
+\begin{aligned}
 \frac{1}{1 + \exp(-y(\beta_{0} + \beta^{T}x))} 
 &= \frac{1}{1 + \exp(\beta_{0} + \beta^{T}x)} \\
 &= P(Y = -1),
-\end{align}
+\end{aligned}
 $$
 which completes the proof.
 
-## 21
+## Q 21
 
 Taking the derivative of $f$,
 $$
@@ -51,15 +51,15 @@ $$
 \frac{f^{\prime\prime}(x)}{\beta} &= f^{\prime}(x) \left(1 - f(x) \right) + f(x) (-f^{\prime}(x)) \\
 &= \beta f(x) \left(1 - f(x) \right)^{2} - \beta [f(x)]^{2} \left(1 - f(x) \right) \\
 &= \beta f(x) \left(1 - f(x) \right)(1 - f(x) - f(x)) \\
-&= \beta f(x) \left(1 - f(x) \right)(1 - 2f(x)) \\
-&= \beta f(x) \left(1 - f(x) \right) \left[1 - \frac{2}{1 + \exp(- \beta_{0} - \beta x)} \right] \\
-&= \beta f(x) \left(1 - f(x) \right) \left[\frac{\exp(- \beta_{0} - \beta x) - 1}{1 + \exp(- \beta_{0} - \beta x)} \right] \\
-&= \beta \frac{f(x) \left(1 - f(x) \right)}{1 + \exp(- \beta_{0} - \beta x)}[\exp(- \beta_{0} - \beta x) - 1] \\
-\therefore f^{\prime\prime}(x) &= \beta^{2} \frac{f(x) \left(1 - f(x) \right)}{1 + \exp(- \beta_{0} - \beta x)}[\exp(- \beta_{0} - \beta x) - 1] 
+&= f^{\prime}(x)(1 - 2f(x)) \\
+&= f^{\prime}(x) \left[1 - \frac{2}{1 + \exp(- \beta_{0} - \beta x)} \right] \\
+&= f^{\prime}(x) \left[\frac{\exp(- \beta_{0} - \beta x) - 1}{1 + \exp(- \beta_{0} - \beta x)} \right] \\
+&= \frac{f^{\prime}(x)}{f(x)}[\exp(- \beta_{0} - \beta x) - 1] \\
+\therefore f^{\prime\prime}(x) &= \beta \frac{f^{\prime}(x)}{f(x)}[\exp(- \beta_{0} - \beta x) - 1] 
 \end{aligned}
 $$
 
-Note that $\beta^{2} \frac{f(x) \left(1 - f(x) \right)}{1 + \exp(- \beta_{0} - \beta x)} > 0$. Thus $f(x)$ is convex if and only if:
+Note that $\beta \frac{f^{\prime}(x)}{f(x)} > 0$. Thus $f(x)$ is convex if and only if:
 $$
 \begin{aligned}
 f^{\prime\prime}(x) > 0 &\Leftrightarrow \exp(-\beta_{0} - \beta x) - 1 > 0 \\
