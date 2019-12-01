@@ -1,0 +1,120 @@
+# 7. Decision Tree
+
+## Q 68
+
+```{r}
+# Make a dataset for the excercise
+df_68 <- Carseats %>%
+  dplyr::mutate(High = dplyr::if_else(Sales <= 8, "No", "Yes")) %>% # Classify based on sales
+  dplyr::mutate_each(
+    dplyr::funs(
+      forcats::fct_relevel(., "Yes", "No")
+    ),
+    Urban, US, High
+  ) %>%
+  dplyr::mutate(ShelveLoc = forcats::fct_relevel(ShelveLoc, "Good", "Medium", "Bad"))
+# Create a decision tree without the variable 'Sales'
+set.seed(1)
+tree_68 <- rpart::rpart(
+  formula = High ~ . -Sales, 
+  data = df_68
+)
+# Plot the decision tree
+rpart.plot::rpart.plot(tree_68)
+```
+
+```{r}
+# Select 200 observations randomly to create a training dataset.
+df_68_train <- sample(1:nrow(df_68), 200)
+# The rest of observations goes to a test dataset.
+df_68_test <- df_68[-df_68_train,]
+# Train the model
+tree_68_train <- rpart::rpart(
+  formula = High ~ ., 
+  data = df_68,
+  subset = df_68_train
+)  
+# Predict
+High_pred <- predict(tree_68_train, df_68_test, type = "class")
+# Evaluate the prediction performance
+High_true <- df_68_test$High
+table(High_pred, High_true)
+```
+
+# Q 69
+
+## (a)
+
+Since $0 < \frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m, k'}} \leq 1$ for any $m \in \{1, \cdots, N\}$ and $k \in \{1, \cdots, K\}$, $\log\frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m, k'}} \leq 0$. It follows that $-\frac{\alpha_{m,k}}{N}\log\frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m, k'}} \geq 0$ for any $m \in \{1, \cdots, N\}$ and $k \in \{1, \cdots, K\}$. Thus
+$$
+H := \sum_{m=1}^{M} \sum_{k=1}^{K} \left( -\frac{\alpha_{m,k}}{N}\log\frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m, k'}} \right) \geq 0.
+$$
+
+## (b)
+
+Suppose $H=0$. Then
+$$
+\begin{aligned}
+H = 0 &\Leftrightarrow \sum_{k=1}^{K}\left( -\frac{\alpha_{m,k}}{N} \log \frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m,k'}} \right) = 0 \quad \forall m \\
+&\Leftrightarrow \alpha_{m,k} = 0  \lor \log \frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m,k'}} = 0 \quad \forall m.
+\end{aligned}
+$$
+
+Since $\sum_{k=1}^{K}\alpha_{m,k} \geq 1$ for any $m$, there exists $k$ such that $\alpha_{m,k} \geq 1$ and $\log \frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m,k'}} = 0$ for any $m$. For that $m$,
+$$
+\alpha_{m,k} = \sum_{k'=1}^{K}\alpha_{m,k'}
+$$
+holds for any $m$.
+
+Suppose for any $m$, there exists $j \in \{1, \cdots, K\}$ such that $\alpha_{m,j} = \sum_{k'=1}^{K}\alpha_{m,k'}$. Take any $m$. Since $\alpha_{m,j} = \sum_{k'=1}^{K}\alpha_{m,k'}$, it follows that $\alpha_{m, k'} = 0$ for any $k' \in \{1, \cdots, K\} \setminus \{j\}$. Thus we have
+$$
+\begin{aligned}
+\sum_{k=1}^{K}\left( -\frac{\alpha_{m,k}}{N} \log \frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m,k'}} \right) &= 
+- \frac{\alpha_{m,j}}{N} \log \underbrace{\frac{\alpha_{m,j}}{\sum_{k'=1}^{K}\alpha_{m,k'}}}_{=1}
++ \sum_{k \neq j} \left( - \underbrace{\frac{\alpha_{m,k}}{N}}_{=0} \log \frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m,k'}} \right) \\
+&= 0.
+\end{aligned}
+$$
+
+Therefore,
+$$
+H := \sum_{m=1}^{M} \sum_{k=1}^{K} \left( -\frac{\alpha_{m,k}}{N}\log\frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m, k'}} \right) = 0.
+
+$$
+
+# Q 70
+
+```{r}
+# Import dataset
+library(MASS)
+df_70 <- Boston %>%
+  tibble::as_tibble()
+names(df_70)
+```
+
+```{r}
+# Training and test data
+train_70 <- sample(1:nrow(Boston), nrow(Boston)/2)
+tree_70 <- rpart::rpart(
+  formula = medv ~ .,
+  data = df_70,
+  subset = train
+)
+# Plot the decision tree
+rpart.plot::rpart.plot(tree_70)
+# Cross validation
+```
+
+```{r}
+# PLot CP and xstd
+df_g_70 <- tree_70$cptable %>%
+  tibble::as_tibble() %>%
+  dplyr::select(nsplit, xstd)
+g_70 <- ggplot(data = df_g_70, aes(x = nsplit, y = xstd)) +
+  geom_line() +
+  geom_vline(xintercept = 5, linetype = "dotted") +
+  xlab("Number of leaves")
+plot(g_70)
+```
+
+

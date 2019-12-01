@@ -26,3 +26,7 @@ library(foreach)
 <!-- 2. Classification -->
 ```{r child="2_Classification.Rmd"}
 ```
+
+<!-- 7. Decision Tree -->
+```{r child="7_DecisionTree.Rmd"}
+```

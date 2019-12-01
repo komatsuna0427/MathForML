@@ -117,7 +117,7 @@ $$
 
 After obtaining $\hat{\beta_{1}}$, we can get $\hat{\beta_{0}}$ from
 $$
-\hat{\beta_{0}} = \bar{y} - \beta_{1}\bar{x}.
+\hat{\beta_{0}} = \bar{y} - \hat{\beta_{1}}\bar{x}.
 $$
 
 # Q 3
