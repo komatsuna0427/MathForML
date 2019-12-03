@@ -154,3 +154,149 @@ g_3 <- ggplot(data = data_3, aes(x = x, y = y, color = group)) +
 plot(g_3)
 ```
 
+# Q 4
+
+## (a)
+
+For any $x \in \mathbb{R}^{m}$,
+
+$$
+\begin{aligned}
+x^{\top} A x &= x^{\top} B^{\top}B x \\
+&= (Bx)^{\top}Bx \\
+&= \left\Vert Bx \right\Vert^{2} \\
+&\geq 0.
+\end{aligned}
+$$
+
+Thus $A$ is positive semi-definite.
+
+## (b)
+
+Let $\Lambda := \text{diag}(\lambda_{1}, \cdots, \lambda_{m}) \in \mathbb{R}^{m \times m}$ and  $\sqrt{\Lambda} := \text{diag}(\sqrt{\lambda_{1}}, \cdots, \sqrt{\lambda_{m}}) \in \mathbb{R}^{m \times m}$. For any $x \in \mathbb{R}$,
+
+$$
+\begin{aligned}
+x^{\top} A x &= x^{\top} P^{\top} \Lambda P x \\
+&= y^{\top} \sqrt{\Lambda}^{\top} \sqrt{\Lambda} y \\
+&=  \left\Vert \sqrt{\Lambda} y \right\Vert^{2} \\
+&= \sum_{i=1}^{m} \sqrt{\lambda_{i}}^{2} y_{i}^{2} \\
+&= \sum_{i=1}^{m} \lambda_{i} y_{i}^{2}.
+\end{aligned}
+$$
+
+We will prove $\lambda_{i} \geq 0$ for any $i \in \{1, \cdots, m\}$ by proof by contradiction.
+
+Suppose there exists $i \in \{1, \cdots, m\}$ such that $\lambda_{i} < 0$. Take $x = P^{-1}y$ such that $y_{i} = 1$ and $y_{j} = 0 \quad (j \neq i)$. Then
+$$
+\begin{aligned}
+\left\Vert Bx \right\Vert^{2} &= x^{\top} B^{\top}B x \\
+&= x^{\top} A x \\
+&= \sum_{k=1}^{m} \lambda_{k} y_{k}^{2} \quad (\text{From the result above}) \\
+&= \lambda_{i} \\
+&< 0.
+\end{aligned}
+$$
+
+However, this contraticts to the fact that $\left\Vert Bx \right\Vert^{2} \geq 0$, which completes the proof. 
+
+## (c)
+
+Take any $z \in \mathbb{R}^{m}$.
+
+Suppose that $Az = 0$. Then
+
+$$
+\begin{aligned}
+Az = 0 &\Leftrightarrow B^{\top}Bz = 0 \\
+&\Rightarrow z^{\top}B^{\top}Bz = 0 \\
+&\Rightarrow \left\Vert Bz \right\Vert^{2} = 0 \\
+&\Leftrightarrow Bz = 0 \\
+\therefore Az = 0 &\Rightarrow Bz = 0.
+\end{aligned}
+$$
+
+Suppose that $Bz = 0$. Then
+
+$$
+\begin{aligned}
+Bz = 0 &\Rightarrow B^{\top}Bz = 0 \\
+&\Leftrightarrow Az = 0 \\
+\therefore Bz = 0 &\Rightarrow Az = 0.
+\end{aligned}
+$$
+
+Therefore
+$$
+Az = 0 \Leftrightarrow Bz = 0.
+$$
+
+## (d)
+
+Suppose $A$ is non-singular. Then
+
+$$
+\begin{aligned}
+m = \text{rank}(A) &= \text{rank}(B^{\top}B) \leq \text{rank}(B) = \min(m, n). \\
+&\therefore m \leq \min(m, n). \\
+&\therefore \min(m, n) = m. \\
+&\therefore m \leq n.
+\end{aligned}
+$$
+
+Then $\text{rank}(B) = m$.
+
+Suppose $m \leq n$ and $\text{rank}(B) = m$. Then we have $\dim(\ker(B)) = 0$. Note that $\dim(\text{Im}(A)) + \dim(\ker(A)) = m$ and that $\dim(\ker(A)) = \dim(\ker(B)) = 0$ from (c). Then we have $\dim(\text{Im}(A)) = m$. Therefore, $A$ is non-singular.
+
+Thus we obtain
+$$
+A \text{ is non-singular} \Leftrightarrow \text{rank}(B) = m \text{ and } m \leq n.
+$$
+
+
+
+# Q 12
+
+```{r}
+# Number of observations
+N <- 100
+# Generate data
+x <- rnorm(N)
+y <- rnorm(N)
+# Compute mean
+x_bar <- mean(x)
+y_bar <- mean(y)
+# Compute OLS
+beta0 <- sum(y_bar * sum(x^2) - x_bar * sum(x * y)) / sum((x - x_bar)^2) 
+beta1 <- sum((x - x_bar) * (y - y_bar)) / sum((x - x_bar)^2) 
+# Compute residual sum of squares
+RSS <- sum((y - beta0 - beta1 * x)^2)
+RSE <- sqrt(RSS / (N - 1 - 1)) 
+B0 <- (sum(x^2) / N) / sum((x - x_bar)^2)
+B1 <- 1 / sum((x - x_bar)^2) 
+# Standard errors
+se0 <- RSE * sqrt(B0)
+se1 <- RSE * sqrt(B1)
+# t statistics
+t0 <- beta0/se0
+t1 <- beta1/se1
+# p values
+p0 <- 2 * (1 - pt(abs(t0), N - 2))
+p1 <- 2 * (1 - pt(abs(t1),N - 2))
+# Show the outputs
+estimate_12 <- 
+  data.frame(
+    param = c('intercept', 'slope'),
+    beta = c(beta0, beta1),
+    se = c(se0, se1),
+    t_stat = c(t0, t1),
+    p_value = c(p0, p1)
+  )
+estimate_12
+```
+
+```{r}
+summary(lm(y ~ x))
+```
+
+
