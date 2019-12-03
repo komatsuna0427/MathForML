@@ -117,4 +117,63 @@ g_70 <- ggplot(data = df_g_70, aes(x = nsplit, y = xstd)) +
 plot(g_70)
 ```
 
+# Q 71
+
+```{r}
+# Import dataset
+library(MASS)
+df_71 <- Boston %>%
+  tibble::as_tibble()
+library(randomForest)
+# Set seed
+set.seed(1)
+# Split into training and test data
+train_71 <- sample(1:nrow(Boston), nrow(Boston)/2)
+test_71 <- Boston[-train_71, "medv"]
+# Traing the model
+bag_71 <- randomForest::randomForest(medv ~ ., data = Boston, subset = train_71, mtry = 13)
+# Make prediction
+yhat_71 <- predict(bag_71, newdata = Boston[-train_71,])
+# Draw scatterplot
+g_71 <- ggplot(data = data.frame(yhat_71, test_71), aes(x = yhat_71, test_71)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1) +
+  xlab("Predicted y") +
+  ylab("Actual y")
+plot(g_71)
+```
+
+
+# Q 72
+
+```{r}
+# Import dataset
+library(MASS)
+df_72 <- Boston %>%
+  tibble::as_tibble()
+library(randomForest)
+# Set seed
+set.seed(1)
+# Split into training and test data
+train_72 <- sample(1:nrow(Boston), nrow(Boston)/2)
+test_72 <- Boston[-train_72, "medv"]
+# Create dataset
+output_72 <- foreach(i = 2:13, .combine = 'rbind') %dopar% {
+  # Traing the model
+  bag <- randomForest::randomForest(medv ~ ., data = Boston, subset = train_72, mtry = i)
+  # Make prediction
+  yhat <- predict(bag, newdata = Boston[-train_72,])
+  # Calculate MSE
+  mse <- mean((yhat - test_72)^2)
+  output <- data.frame(
+    mtry = i,
+    mse = mse
+  )
+}
+# Plot the relationship between mtry and mse
+g_72 <- ggplot(data = output_72, aes(x = mtry, y = mse)) +
+  geom_line() +
+  scale_x_continuous(breaks = 2:13)
+plot(g_72)
+```
 

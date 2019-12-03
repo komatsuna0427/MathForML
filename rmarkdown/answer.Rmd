@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(magrittr)
 library(ggplot2)
 library(foreach)
+doParallel::registerDoParallel()
 ```
 
 
