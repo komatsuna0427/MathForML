@@ -8,7 +8,7 @@ output:
     toc_depth: 1
   html_document:
     toc: true
-    toc_depth: 1
+    toc_depth: 0
 ---
 
 ```{r setup, include=FALSE}

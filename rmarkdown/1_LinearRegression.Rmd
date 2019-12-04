@@ -120,7 +120,7 @@ $$
 \hat{\beta_{0}} = \bar{y} - \hat{\beta_{1}}\bar{x}.
 $$
 
-# Q 3
+## Q 3
 
 ```{r}
 # Set seed
@@ -154,9 +154,9 @@ g_3 <- ggplot(data = data_3, aes(x = x, y = y, color = group)) +
 plot(g_3)
 ```
 
-# Q 4
+## Q 4
 
-## (a)
+### (a)
 
 For any $x \in \mathbb{R}^{m}$,
 
@@ -171,7 +171,7 @@ $$
 
 Thus $A$ is positive semi-definite.
 
-## (b)
+### (b)
 
 Let $\Lambda := \text{diag}(\lambda_{1}, \cdots, \lambda_{m}) \in \mathbb{R}^{m \times m}$ and  $\sqrt{\Lambda} := \text{diag}(\sqrt{\lambda_{1}}, \cdots, \sqrt{\lambda_{m}}) \in \mathbb{R}^{m \times m}$. For any $x \in \mathbb{R}$,
 
@@ -200,7 +200,7 @@ $$
 
 However, this contraticts to the fact that $\left\Vert Bx \right\Vert^{2} \geq 0$, which completes the proof. 
 
-## (c)
+### (c)
 
 Take any $z \in \mathbb{R}^{m}$.
 
@@ -231,7 +231,7 @@ $$
 Az = 0 \Leftrightarrow Bz = 0.
 $$
 
-## (d)
+### (d)
 
 Suppose $A$ is non-singular. Then
 
@@ -254,8 +254,182 @@ A \text{ is non-singular} \Leftrightarrow \text{rank}(B) = m \text{ and } m \leq
 $$
 
 
+## Q 5
 
-# Q 12
+### (a) When $N < p + 1$:
+
+We prove this by proof by contradiction. Suppose that $X^{\top}X$ is invertible. Then $\text{rank}(X^{\top}X) = p+1$. From the result from Q 4,
+
+$$
+\begin{aligned}
+p + 1 = \text{rank}(X^{\top}X)  \leq \text{rank}(X) &= \min(n, p+1) = N \quad (\text{since } N < p+1) \\
+\therefore p + 1 &\leq N,
+\end{aligned}
+$$
+which is a contradiction.
+
+### (b) When $N \geq p + 1$ and there are two identical columns in $X$:
+
+Since $X$ is not of full column rank, $\text{rank}(X) < p+1$. Then
+
+$$
+\begin{aligned}
+p+1 > \text{rank}(X) &\geq \text{rank}(X^{\top}X) \\
+\therefore \text{rank}(X^{\top}X) < p+1
+\end{aligned}
+$$
+
+Therefore, $X^{\top}X$ is not invertible.
+
+
+## Q 7
+
+### (a)
+
+$$
+\begin{aligned}
+\hat{\beta} &= (X^{\top}X)^{-1}X^{\top}y \\
+&= (X^{\top}X)^{-1}X^{\top} (X\beta + \epsilon) \\
+&= (X^{\top}X)^{-1}(X^{\top}X)\beta + (X^{\top}X)^{-1}X^{\top}\epsilon \\
+&= \beta + (X^{\top}X)^{-1}X^{\top}\epsilon.
+\end{aligned}
+$$
+
+### (b)
+
+What we need to show is $\mathbb{E}(\hat{\beta}) = \beta$.
+
+$$
+\begin{aligned}
+\mathbb{E}(\hat{\beta}) &= \mathbb{E}(\beta + (X^{\top}X)^{-1}X^{\top}\epsilon) \\
+&= \beta + \mathbb{E}((X^{\top}X)^{-1}X^{\top}\epsilon) \\
+&= \beta + \mathbb{E}[\mathbb{E} \{(X^{\top}X)^{-1}X^{\top}\epsilon \vert  X\}] \quad (\text{by the law of iterated expectation}) \\
+&= \beta + \mathbb{E}[ (X^{\top}X)^{-1}X^{\top}\mathbb{E}\{\epsilon \vert  X\}] \\
+&= \beta + \mathbb{E}[ (X^{\top}X)^{-1}X^{\top}\mathbb{E}\{\epsilon\}] \quad (\text{since } X \text{ and } \epsilon \text{ are independent}) \\
+&= \beta \quad (\mathbb{E}(\epsilon) = 0).
+\end{aligned}
+$$
+
+### (c)
+
+$$
+\begin{aligned}
+(\hat{\beta} - \beta)(\hat{\beta} - \beta)^{\top} &= (X^{\top}X)^{-1}X^{\top}\epsilon [(X^{\top}X)^{-1}X^{\top}\epsilon]^{\top} \\
+&= (X^{\top}X)^{-1}X^{\top}\epsilon \epsilon^{\top} X (X^{\top}X)^{-1}
+\end{aligned}
+$$
+
+Since $\sigma^{2}I = \mathbb{E}[(\epsilon - \mathbb{E}(\epsilon)(\epsilon - \mathbb{E}(\epsilon)^{\top}] = \mathbb{E}[\epsilon \epsilon^{\top}]$, and $X$ and $\epsilon$ are independent, it follows that
+
+$$
+\begin{aligned}
+\mathbb{E}[\epsilon \epsilon^{\top} \vert X] &= \mathbb{E}[\epsilon \epsilon^{\top}] = \sigma^{2}I.
+\end{aligned}
+$$
+
+Then
+
+$$
+\begin{aligned}
+\mathbb{E}[(\hat{\beta} - \beta)(\hat{\beta} - \beta)^{\top} \vert X] &= 
+\mathbb{E}[(X^{\top}X)^{-1}X^{\top}\epsilon \epsilon^{\top} X (X^{\top}X)^{-1} \vert X] \\
+&= (X^{\top}X)^{-1}X^{\top} \underbrace{\mathbb{E}[\epsilon \epsilon^{\top} \vert X]}_{=\sigma^{2}I} X (X^{\top}X)^{-1} \\
+&= \sigma^{2} (X^{\top}X)^{-1} X^{\top}X (X^{\top}X)^{-1} \\
+&= \sigma^{2} (X^{\top}X)^{-1}
+\end{aligned}
+$$
+
+## Q 8
+
+### (a)
+
+$$
+\begin{aligned}
+H^{2} 
+&= X\underbrace{(X^{\top}X)^{-1}X^{\top}X}_{=I}(X^{\top}X)^{-1}X^{\top} \\
+&= X(X^{\top}X)^{-1}X^{\top} \\
+&= H.
+\end{aligned}
+$$
+
+
+### (b)
+
+$$
+\begin{aligned}
+(I-H)^{2} 
+&= (I-H)(I-H) \\
+&= I - 2H + H^{2} \\
+&= I - 2H + H \\
+&= I - H.
+\end{aligned}
+$$
+
+### (c)
+
+$$
+\begin{aligned}
+HX 
+&= X\underbrace{(X^{\top}X)^{-1}X^{\top}X}_{=I} \\
+&= X.
+\end{aligned}
+$$
+
+### (d)
+
+$$
+\begin{aligned}
+\hat{y}
+:=& X\hat{\beta} \\
+=& \underbrace{X(X^{\top}X)^{-1}X^{\top}}_{=:H}y \\
+=& Hy.
+\end{aligned}
+$$
+
+### (e)
+
+$$
+\begin{aligned}
+y - \hat{y}
+:=& y - Hy \\
+=& (I-H)y \\
+=& (I-H)(X\beta + \epsilon) \\
+=& X\beta - \underbrace{HX}_{=X}\beta + (I-H)\epsilon \\
+=& X\beta - X\beta + (I-H)\epsilon \\
+=& (I-H)\epsilon.
+\end{aligned}
+$$
+
+### (f)
+
+Note that
+$$
+\begin{aligned}
+(I-H)^{\top} 
+=& I - H^{\top} \\
+=& I - [X(X^{\top}X)X^{\top}]^{\top} \\
+=& I - X[(X^{\top}X)^{-1}]^{\top}X^{\top} \\
+=& I - X(X^{\top}X)^{-1}X^{\top} \\
+=& I - H.
+\end{aligned}
+$$
+
+Then
+
+$$
+\begin{aligned}
+\left \Vert y - \hat{y} \right \Vert 
+=& (y - \hat{y})^{\top}(y - \hat{y}) \\
+=& [(I-H)\epsilon]^{\top}(I-H)\epsilon \\
+=& \epsilon^{\top}(I-H)^{\top}(I-H)\epsilon \\
+=& \epsilon^{\top}(I-H)^{2}\epsilon \\
+=& \epsilon^{\top}(I-H)\epsilon.
+\end{aligned}
+$$
+
+
+
+## Q 12
 
 ```{r}
 # Number of observations

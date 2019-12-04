@@ -3,6 +3,7 @@
 ## Q 68
 
 ```{r}
+library(ISLR)
 # Make a dataset for the excercise
 df_68 <- Carseats %>%
   dplyr::mutate(High = dplyr::if_else(Sales <= 8, "No", "Yes")) %>% # Classify based on sales
@@ -41,16 +42,16 @@ High_true <- df_68_test$High
 table(High_pred, High_true)
 ```
 
-# Q 69
+## Q 69
 
-## (a)
+### (a)
 
 Since $0 < \frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m, k'}} \leq 1$ for any $m \in \{1, \cdots, N\}$ and $k \in \{1, \cdots, K\}$, $\log\frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m, k'}} \leq 0$. It follows that $-\frac{\alpha_{m,k}}{N}\log\frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m, k'}} \geq 0$ for any $m \in \{1, \cdots, N\}$ and $k \in \{1, \cdots, K\}$. Thus
 $$
 H := \sum_{m=1}^{M} \sum_{k=1}^{K} \left( -\frac{\alpha_{m,k}}{N}\log\frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m, k'}} \right) \geq 0.
 $$
 
-## (b)
+### (b)
 
 Suppose $H=0$. Then
 $$
@@ -79,10 +80,9 @@ $$
 Therefore,
 $$
 H := \sum_{m=1}^{M} \sum_{k=1}^{K} \left( -\frac{\alpha_{m,k}}{N}\log\frac{\alpha_{m,k}}{\sum_{k'=1}^{K}\alpha_{m, k'}} \right) = 0.
-
 $$
 
-# Q 70
+## Q 70
 
 ```{r}
 # Import dataset
@@ -98,7 +98,7 @@ train_70 <- sample(1:nrow(Boston), nrow(Boston)/2)
 tree_70 <- rpart::rpart(
   formula = medv ~ .,
   data = df_70,
-  subset = train
+  subset = train_70
 )
 # Plot the decision tree
 rpart.plot::rpart.plot(tree_70)
@@ -112,19 +112,17 @@ df_g_70 <- tree_70$cptable %>%
   dplyr::select(nsplit, xstd)
 g_70 <- ggplot(data = df_g_70, aes(x = nsplit, y = xstd)) +
   geom_line() +
-  geom_vline(xintercept = 5, linetype = "dotted") +
   xlab("Number of leaves")
 plot(g_70)
 ```
 
-# Q 71
+## Q 71
 
 ```{r}
 # Import dataset
 library(MASS)
 df_71 <- Boston %>%
   tibble::as_tibble()
-library(randomForest)
 # Set seed
 set.seed(1)
 # Split into training and test data
@@ -144,14 +142,13 @@ plot(g_71)
 ```
 
 
-# Q 72
+## Q 72
 
 ```{r}
 # Import dataset
 library(MASS)
 df_72 <- Boston %>%
   tibble::as_tibble()
-library(randomForest)
 # Set seed
 set.seed(1)
 # Split into training and test data
